@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Backlog</title>
+    <style type="text/css">
+        #contenido{
+            border:1px solid black;
+            padding: 1rem;
+            display:flex;
+            margin-left:auto;
+            margin-right:auto;
+            justify-content: space-around;
+        }
+        #backlog, #sprints, #sprint_backlog{
+            border:1px solid black;
+            margin:1rem;
+        }
+        #backlog h1, #sprints h1, #sprint_backlog h1, #sprint_backlog h3{
+            text-align: center;
+        }
+        .historia{
+            margin:1rem;
+            background-color:yellow;
+            padding: 1rem;
+        }
+        .sprint{
+            margin:1rem;
+            background:lightblue;
+            padding: 1rem;
+            overflow:hidden;
+        }
+        .valor_historia{
+            background-color:gray;
+        }
+        .btn_detalles_historia, .btn_detalles_sprint{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="contenido">
+        <div id="backlog">
+            <h1>Backlog</h1>
+            <div class="historia" draggable="true" id="HU#1">
+                <ul>
+                    <li class="etiqueta_historia">HU#1</li>
+                    <li class="nombre_historia">Nombre de la historia de ejemplo</li>
+                </ul>
+                <span class="valor_historia" title="Valor de negocio">100</span>
+                <button class="btn_detalles_historia">Mostrar detalles</button>
+            </div>
+        </div>
+        <div id="sprints">
+            <h1>Sprints</h1>
+            <div class="sprint">
+                <h1>Sprint 1</h1>
+                <button class="btn_detalles_sprint">Mostrar detalles</button>
+            </div>
+        </div>
+        <div id="sprint_backlog">
+            <h1>Sprint backlog</h1>
+            <h3>(Sprint 1)</h3>
+            <div class="historia" id="hu#1">
+                <ul>
+                    <li class="etiqueta_historia">HU#1</li>
+                    <li class="nombre_historia">Nombre de la historia de ejemplo</li>
+                </ul>
+                <span class="valor_historia" title="Valor de negocio">100</span>
+                <button class="btn_detalles_historia">Mostrar detalles</button>
+            </div>            
+        </div>
+    </div>
+
+    <div id="comp_crear_historia">
+        <h1>Nueva historia</h1>
+        <ul>
+            <li><label for="nombre_crear_historia">Nombre</label><input type="text" id="nombre_crear_historia"/></li>
+            <li><label for="etitqueta_crear_historia">Etiqueta</label><input type="text" id="etiqueta_crear_historia" placeholder="Opciona"/></li>
+            <li><textarea id="descripcion_crear_historia" placeholder="Descripción de la historia"></textarea></li>
+            <li><label for="valor_crear_historia">Valor de negocio</label><input type="number" id="valor_crear_historia"/></li>
+            <li><button id="btn_crear_historia">Crear</button></li>
+        </ul>
+    </div>
+    
+    <script type="text/javascript">
+        
+// -------------------------------------------------------
+        
+        var HistoriaHelper = {
+            id: null,
+            init: function(id, nombre, descripcion, valor){
+                this.id = id;
+                this.nombre = nombre;
+                this.descripcion = descripcion;
+                this.valor = valor;
+            },
+            fromObjeto: function(historia){
+                this.id = historia.id;
+                this.nombre = historia.nombre;
+                this.descripcion = historia.descripcion;
+                this.valor = historia.valor;
+                return this;
+            },
+            /*getIdFromDOMObject: function(domObject){
+                return domObject.getElementsByTagName("li")[0].value;
+            },*/
+            getHistoriaDOM: function(){
+                var historia = "";
+                if (this.id){
+                    historia = " <ul>" +
+                               "    <li class='etiqueta_historia'>" + this.id + "</li>" +
+                               "    <li class='nombre_historia'>" + this.nombre + "Nombre de la historia de ejemplo</li>" +
+                               " </ul>" +
+                               " <span class='valor_historia' title='Valor de negocio'>" + this.valor + "</span>" +
+                               " <button class='btn_detalles_historia'>Mostrar detalles</button><button class='btn_borrar_historia' onclick='BacklogView.solicitar.borrarHistoria(this.parentNode);'>Borrar historia</button>";
+                    var historiaDOM = document.createElement("div");
+                    historiaDOM.setAttribute("class","historia");
+                    historiaDOM.setAttribute("draggable","true");
+                    historiaDOM.setAttribute("id",this.id);
+                    historiaDOM.innerHTML = historia;
+                    return historiaDOM;
+                } else {
+                    return null;
+                }
+            }
+        };
+        
+// -------------------------------------------------------
+        
+        var DBBacklogQuery = {
+            setViewModelCallback:function(callback){
+                this.callback = callback;
+            },
+            getAllHistorias: function(){
+                if (this.callback){
+                    setTimeout(this.notificarResultadoAllHistorias,1000);
+                }
+            },
+            insertHistoria: function(historia){
+                if (this.callback){
+                    setTimeout(this.notificarInsercion,1000);
+                }
+            },
+            borrarHistoriaById: function(idHistoria){
+                if (this.callback){
+                    setTimeout(this.notificarBorrado,1000);
+                }
+            },
+            notificarResultadoAllHistorias: function(){
+                // SIMULACIÓN DE RESPUESTA AJAX //
+                DBBacklogQuery.callback(DBBacklogQuery.historiasEjemploJSON());
+            },
+            notificarInsercion: function(){
+                DBBacklogQuery.callback(true);  
+            },
+            notificarBorrado: function(){
+                DBBacklogQuery.callback(true);
+            },
+            historiasEjemploJSON: function(){
+                return JSON.stringify({
+                                        historias: [
+                                            {   id: "HU#A",
+                                                nombre: "Historia A",
+                                                descripcion: "Descripción de la historia A",
+                                                valor: 200
+                                            },
+                                            {   id:"HU#B",
+                                                nombre: "Historia B",
+                                                descripcion: "Descripción de la historia B",
+                                                valor: 200
+                                            },
+                                            {   id:"HU#C",
+                                                nombre: "Historia C",
+                                                descripcion: "Descripción de la historia C",
+                                                valor: 200}]
+                                    });}
+        };
+        
+
+// -------------------------------------------------------        
+        
+        var BacklogViewModel = {
+            historias: [],
+            setViewCallback: function(callback){
+                this.callback = callback;
+            },
+            getHistoriaIndexById: function(id){
+                for (var i=0; i<BacklogViewModel.historias.length;i++){
+                   if (BacklogViewModel.historias[i].id == id){ 
+                       return i;
+                    }
+                }
+                return -1;
+            },
+            ejecutar: function(com,args){
+                this.acciones[com](args);
+            },
+            acciones: {
+                solicitarHistorias: function(){
+                    DBBacklogQuery.setViewModelCallback(function(historiasJSON){
+                        var historias = JSON.parse(historiasJSON);
+                        BacklogViewModel.historias = historias.historias;
+                        BacklogViewModel.callback(historias);
+                    });
+                    DBBacklogQuery.getAllHistorias();
+                },
+                validarNuevaHistoria: function(nuevaHistoria){
+                    var historiaIndex = BacklogViewModel.getHistoriaIndexById(nuevaHistoria.id);
+                    if (historiaIndex == -1){
+                        DBBacklogQuery.setViewModelCallback(function(exito){
+                            if (exito){
+                                BacklogViewModel.historias.push(nuevaHistoria);
+                                BacklogViewModel.callback(nuevaHistoria);
+                            } else {
+                                BacklogViewModel.callback(null);    
+                            }
+                            
+                        });
+                        DBBacklogQuery.insertHistoria(nuevaHistoria);
+                    } else {
+                        BacklogViewModel.callback(null);
+                    }
+                    
+                },
+                borrarHistoriaById: function(id){
+                    var historiaIndex = BacklogViewModel.getHistoriaIndexById(id);
+                    if (historiaIndex!=-1){
+                        DBBacklogQuery.setViewModelCallback(function(exito){
+                            if (exito){
+                                BacklogViewModel.historias.splice(historiaIndex,1);
+                                BacklogViewModel.callback();    
+                            } else {
+                                alert("No se ha podido borrar la historia");
+                            }
+                        });
+                        DBBacklogQuery.borrarHistoriaById(id);
+                        
+                    } else {
+                        alert("No se ha podido borrar la historia");
+                    }
+                }
+            }
+        }
+
+// -------------------------------------------------------        
+        
+        var NuevaHistoriaView = {
+            init: function(){
+                var botonNuevaHistoria = document.getElementById("btn_crear_historia");
+                botonNuevaHistoria.addEventListener("click",BacklogView.solicitar.insertarHistoria);
+            },
+            getHistoria: function(){
+                var historia = new Object();
+                historia.nombre = document.getElementById("nombre_crear_historia").value;
+                historia.id = document.getElementById("etiqueta_crear_historia").value.replace(/\s*/g,'');
+                historia.descripcion = document.getElementById("descripcion_crear_historia").value;
+                historia.valor = document.getElementById("valor_crear_historia").value;
+                return historia;
+            }
+        }
+        
+// -------------------------------------------------------
+        
+        var BacklogView = {
+            init: function(){
+                this.solicitar.actualizarHistorias();  
+            },
+            drawHistoria: function(historiaHelper){
+                if (historiaHelper.id){
+                    var backlog = document.getElementById("backlog");
+                    backlog.appendChild(historiaHelper.getHistoriaDOM());
+                }   
+            },
+            solicitar: {
+                actualizarHistorias: function(){
+                    BacklogViewModel.setViewCallback(BacklogView.callbacks.actualizarHistorias);
+                    BacklogViewModel.ejecutar("solicitarHistorias");
+                },
+                insertarHistoria: function(){
+                    var historia = NuevaHistoriaView.getHistoria();
+                    BacklogViewModel.setViewCallback(BacklogView.callbacks.insertarHistoria);
+                    BacklogViewModel.ejecutar("validarNuevaHistoria",historia);
+                },
+                borrarHistoria: function(historiaDOM){
+                    BacklogView.historiaMarcada = historiaDOM;
+                    var id = historiaDOM.getElementsByTagName("li")[0].textContent;
+                    BacklogViewModel.setViewCallback(BacklogView.callbacks.borrarHistoriaMarcada);
+                    BacklogViewModel.ejecutar("borrarHistoriaById",id);
+                }
+            },
+            callbacks: {
+                actualizarHistorias: function(historias){
+                    var listaHistorias = historias.historias;
+                        for (var i=0; i<listaHistorias.length; i++){
+                            var historiaHelper = Object.create(HistoriaHelper);
+                            historiaHelper.fromObjeto(listaHistorias[i]);
+                            BacklogView.drawHistoria(historiaHelper);
+                        }
+                },
+                insertarHistoria: function(historia){
+                    if (historia){
+                        var historiaHelper = Object.create(HistoriaHelper);
+                        historiaHelper.fromObjeto(historia);
+                        BacklogView.drawHistoria(historiaHelper);
+                    } else {
+                        alert("La historia ya existe");
+                    }
+                },
+                borrarHistoriaMarcada: function(){
+                    BacklogView.historiaMarcada.parentNode.removeChild(BacklogView.historiaMarcada);
+                    BacklogView.historiaMarcada = null;
+                }
+            }
+            
+        };
+        
+        NuevaHistoriaView.init();
+        BacklogView.init();
+    </script>
+        
+</body>
+</html>
