@@ -64,7 +64,6 @@
     </style>
 </head>
 <body>
-	<button id="cambiarIcono">Ocultar</button>
     <div id="contenido">
         <div id="backlog">
             <h1>Backlog</h1>
@@ -113,14 +112,6 @@
 	<script src="BacklogView.js"></script>
 	<script>
 		InfoHistoriaView.init();
-		document.getElementById("cambiarIcono").addEventListener("click",function(){
-			var icono = document.getElementById("icono_cargando");
-			if (icono.getAttribute("src") != ""){
-				InfoHistoriaView.interface.mostrarIconoCargando();
-			} else {
-				InfoHistoriaView.interface.ocultarIconoCargando();
-			}
-		});
 		BacklogView.init();
 	</script>
 </body>

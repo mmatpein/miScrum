@@ -44,7 +44,7 @@
             igual: function(historia){
                 if ((this.id == historia.id) && 
                     (this.nombre == historia.nombre) &&
-                    (this.nombre == historia.nombre) &&
+                    (this.descripcion == historia.descripcion) &&
                     (this.valor == this.valor)){
                     return true;
                 } else {
