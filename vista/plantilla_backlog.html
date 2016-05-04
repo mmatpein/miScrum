@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Backlog</title>
+    <style type="text/css">
+        #contenido{
+            border:1px solid black;
+            padding: 1rem;
+            display:flex;
+            margin-left:auto;
+            margin-right:auto;
+            justify-content: space-around;
+        }
+        #backlog, #sprints, #sprint_backlog{
+            border:1px solid black;
+            margin:1rem;
+        }
+        #backlog h1, #sprints h1, #sprint_backlog h1, #sprint_backlog h3{
+            text-align: center;
+        }
+        .historia{
+            margin:1rem;
+            background-color:yellow;
+            padding: 1rem;
+        }
+        .sprint{
+            margin:1rem;
+            background:lightblue;
+            padding: 1rem;
+            overflow:hidden;
+        }
+        .valor_historia{
+            background-color:gray;
+        }
+        .btn_detalles_historia, .btn_detalles_sprint{
+            float:right;
+        }
+        #comp_info_historia{
+            position:absolute;
+            margin:auto;
+            top:0;
+            left:0;
+            bottom:0;
+            right:0;
+            border:1px solid black;
+            background-color: rgba(0,0,0,0.5);
+            padding: 3em;
+        }
+        #comp_info_historia div{
+            position:absolute;
+            padding: 3em;
+            margin:auto;
+            top:30%;
+            left:30%;
+            right:30%;
+            bottom:30%;
+            background-color:azure;
+        }
+        #icono_cargando{
+            width:20px;
+			visibility:none;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenido">
+        <div id="backlog">
+            <h1>Backlog</h1>
+            <button id="btn_nueva_historia">Nueva historia</button>
+        </div>
+        <div id="sprints">
+            <h1>Sprints</h1>
+            <div class="sprint">
+                <h1>Sprint 1</h1>
+                <button class="btn_detalles_sprint">Mostrar detalles</button>
+            </div>
+        </div>
+        <div id="sprint_backlog">
+            <h1>Sprint backlog</h1>
+            <h3>(Sprint 1)</h3>
+            <div class="historia" id="hu#1">
+                <ul>
+                    <li class="etiqueta_historia">HU#1</li>
+                    <li class="nombre_historia">Nombre de la historia de ejemplo</li>
+                </ul>
+                <span class="valor_historia" title="Valor de negocio">100</span>
+                <button class="btn_detalles_historia">Mostrar detalles</button>
+            </div>            
+        </div>
+    </div>
+
+    <div id="comp_info_historia">
+        <div>
+            <h1>Nueva historia</h1>
+            <ul>
+                <li><label for="input_nombre_historia">Nombre</label><input type="text" id="input_nombre_historia"/></li>
+                <li><label for="input_etiqueta_historia">Etiqueta</label><input type="text" id="input_etiqueta_historia" placeholder="Opciona"/></li>
+                <li><textarea id="input_descripcion_historia" placeholder="Descripción de la historia"></textarea></li>
+                <li><label for="input_valor_historia">Valor de negocio</label><input type="number" id="input_valor_historia"/></li>
+                <li><button id="btn_aceptar_info_historia">Aceptar</button><button id="btn_cancelar_info_historia">Cancelar</button></li>
+            </ul>
+            <img id="icono_cargando"/>
+        </div>
+    </div>
+    
+	<script src="HistoriaHelper.js"></script>
+	<script src="DBBacklogQuery.js"></script>
+	<script src="BacklogViewModel.js"></script>
+	<script src="InfoHistoriaView.js"></script>
+	<script src="HistoriaView.js"></script>
+	<script src="BacklogView.js"></script>
+	<script>
+		InfoHistoriaView.init();
+		BacklogView.init();
+	</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ejemplo de pruebas síncronas (sobre HistoriaHelper) y de pruebas asíncronas (sobre BacklogViewModel) con QUnit</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.23.1.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+	<div class="historia" draggable="true" id="HU#1">
+		<ul>
+			<li class='etiqueta_historia'>HU#1</li>
+			<li class='nombre_historia'>Un nombre</li>
+		</ul>
+		<span class='valor_historia' title='Valor de negocio'>15</span>
+		<button class='btn_detalles_historia' onclick='HistoriaView.solicitar.mostrarDetalles(this.parentNode);'>Mostrar detalles</button><button class='btn_borrar_historia' onclick='HistoriaView.solicitar.borrarHistoria(this.parentNode);'>Borrar historia</button>
+	</div>
+  </div>
+  <script src="../HistoriaHelper.js"></script>
+  <script src="../BacklogViewModel.js"></script>
+  <script src="../DBBacklogQuery.js"></script>
+  <script src="https://code.jquery.com/qunit/qunit-1.23.1.js"></script>
+  <script>
+	  
+		
+    QUnit.test( "HistoriaHelper test", function( assert ) {
+      	var historiaDOMEsperada = document.getElementById("HU#1");
+		var historiaHelper = Object.create(HistoriaHelper);
+		historiaHelper.init("HU#1","Un nombre","Una descripción", 15);
+		var historiaDOMObtenida = historiaHelper.getHistoriaDOM();
+		assert.deepEqual(JSON.stringify(historiaDOMEsperada),JSON.stringify(historiaDOMObtenida), "El código html generado no es correcto" );
+    });
+	  
+	QUnit.module("HistoriaViewModel",{
+		beforeEach: function(){
+			this.historiasPrueba = {
+				"HU#1": {id:"HU#1",nombre:"Historia A",descripcion:"Descripción A",valor:10},
+				"HU#2": {id:"HU#2",nombre:"Historia B",descripcion:"Descripción B",valor:10}
+			};
+			this.BacklogViewModel = BacklogViewModel;
+			this.BacklogViewModel.historias = this.historiasPrueba;
+		}
+	});
+	
+	QUnit.test( "HistoriaViewModel. Inserciones válidas", function( assert){
+		var done = assert.async();
+		var nuevaHistoria = {id:"HU3",nombre:"Historia C",descripcion:"Descripcion C",valor:1};
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.deepEqual(historia,nuevaHistoria,"Una historia que no existe debería ser validada");
+			done();
+		});
+		this.BacklogViewModel.acciones.validarNuevaHistoria(nuevaHistoria);
+	});
+	  
+	  
+	QUnit.test( "HistoriaViewModel. Inserciones no válidas", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.error,"La historia ya existe","No se debería validar una historia que ya existe");
+			done();
+		});
+		this.BacklogViewModel.acciones.validarNuevaHistoria(this.historiasPrueba["HU#1"]);
+	});
+	  
+	QUnit.test( "BacklogViewModel. Borrado válido", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.id,"HU#1","La historia devuelta no es la borrada");
+			assert.ok(this.historias["HU#1"] == undefined,"El objeto no se ha borrado de BacklogViewModel");
+			done();
+		});
+		this.BacklogViewModel.acciones.borrarHistoriaById(this.historiasPrueba["HU#1"].id);
+	});
+	  
+	QUnit.test( "BacklogViewModel. Borrado no válido", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.error,"No se ha podido borrar la historia","No se ha generado el mensaje de error correcto");
+			done();
+		});
+		this.BacklogViewModel.acciones.borrarHistoriaById("HU#30");
+	});
+	  
+	QUnit.test( "BacklogViewModel. Solicitar historia existente", function(assert){
+		var done = assert.async();
+	  	this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.id,"HU#1","La historia no ha sido encontrada");
+			done();
+		});
+	  	this.BacklogViewModel.acciones.solicitarHistoria("HU#1");
+	});
+	  
+	QUnit.test( "BacklogViewModel. Solicitar historia no existente", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.error,"La historia no existe","La historia no existe");
+			done();
+			
+		});
+		this.BacklogViewModel.acciones.solicitarHistoria("HU#30");
+	});
+	  
+	QUnit.test( "BacklogViewModel. Actualizar historia existente", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.deepEqual(historia,{id:"HU#1",nombre:"Nombre modificado",descripcion:"Descripcion modificada",valor:5000},"La historia no ha sido modificada");
+			done();
+		});
+		this.BacklogViewModel.acciones.actualizarHistoria({id:"HU#1",nombre:"Nombre modificado",descripcion:"Descripcion modificada",valor:5000});
+	});
+	  
+	QUnit.test( "BacklogViewModel. Actualizar historia sin cambios", function(assert){
+		var done = assert.async();
+	  	this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.error,"No hay cambios en la historia","No deberían haber cambios en la historia");
+			done();
+		});
+		this.BacklogViewModel.acciones.actualizarHistoria(this.historiasPrueba["HU#1"]);
+	});
+	  
+	QUnit.test( "BacklogViewModel. Actualizar historia no existente", function(assert){
+		var done = assert.async();
+		this.BacklogViewModel.setViewCallback(function(historia){
+			assert.equal(historia.error,"La historia no existe","No se puede modificar una historia que no existe");
+			done();
+		});
+		this.BacklogViewModel.acciones.actualizarHistoria({id:"HU#30",nombre:"No existe",historia:"No existe",valor:100});
+	});
+	
+  </script>
+</body>
+</html>

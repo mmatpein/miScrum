@@ -1,0 +1,2 @@
+InfoHistoriaView.init();
+BacklogView.init();
