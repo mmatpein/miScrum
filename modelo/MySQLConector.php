@@ -14,7 +14,7 @@ namespace miScrum\modelo;
  * @author mauri
  */
 
-require '../vendor/autoload.php';
+//require '../vendor/autoload.php';
 
 use miScrum\config\BDConfig;
 

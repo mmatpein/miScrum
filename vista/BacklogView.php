@@ -19,16 +19,16 @@ class BacklogView {
     protected $operacionRealizada;
     
     public function __construct($tipoRequest,$operacionRealizada,$datosADevolver){
-        $this->tipoRequest = $tipoRequest;
+		$this->tipoRequest = $tipoRequest;
         $this->datosADevolver = $datosADevolver;
-        $this->operacionRealizada = $operacionRealizada;
+		$this->operacionRealizada = $operacionRealizada;
     }
     
     public function mostrar(){
         if (strcmp($this->tipoRequest,"GET")==0){
             require __DIR__.'/plantilla_backlog.html';
         } else {
-            echo json_encode($this->prepararDatos());
+			echo json_encode($this->prepararDatos());
         }
     }
     
@@ -39,7 +39,7 @@ class BacklogView {
                 $idHistoria = $this->datosADevolver[$i]["id"];
                 $datosADevolverModificados[$idHistoria] = $this->datosADevolver[$i];
             }
-            return $datosADevolverModificados;
+			return $datosADevolverModificados;
         } else {
             return $this->datosADevolver; // No es necesario. Solo se devuelve con propósito de testeo.
         }

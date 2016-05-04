@@ -8,7 +8,7 @@
 
 namespace miScrum\modelo;
 
-require "../vendor/autoload.php";
+//require "../vendor/autoload.php";
 
 use miScrum\modelo\MySQLConector;
 use miScrum\config\BDConfig;
@@ -18,7 +18,9 @@ use miScrum\config\BDConfig;
  * @author mauri
  */
 class BacklogMySQL {
-    public function leer(){
+	
+	public function leer(){
+		
         $config = new BDConfig();
         $mySQLCon = new MySQLConector($config);
         $mySQLCon->conectar();
@@ -27,6 +29,6 @@ class BacklogMySQL {
         while ($mySQLCon->hasNext()){
             array_push($resultado,$mySQLCon->next());
         }
-        return $resultado;
+		return $resultado;
     }
 }

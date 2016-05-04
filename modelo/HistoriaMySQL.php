@@ -8,7 +8,7 @@
 
 namespace miScrum\modelo;
 
-require '../vendor/autoload.php';
+//require '../vendor/autoload.php';
 
 /**
  * Description of HistoriaMySQL
