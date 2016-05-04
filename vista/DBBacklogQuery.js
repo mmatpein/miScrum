@@ -57,25 +57,25 @@
                 getAllHistorias: function(){
                     if (DBBacklogQuery.callback){
 						var solicitud = DBBacklogQuery.HTTP.prepararDatosParaEnviar("seleccionarTodo","historia",{});
-						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/temp/testAJAX.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.resultadoAllHistorias);
+						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/miScrum/index.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.resultadoAllHistorias);
                     }
                 },
                 insertHistoria: function(historia){
                     if (DBBacklogQuery.callback){
 						var solicitud = DBBacklogQuery.HTTP.prepararDatosParaEnviar("insertar","historia",historia);
-						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/temp/testAJAX.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.insercion);
+						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/miScrum/index.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.insercion);
 					}
                },
                 borrarHistoriaById: function(idHistoria){
                     if (DBBacklogQuery.callback){
 						var solicitud = DBBacklogQuery.HTTP.prepararDatosParaEnviar("borrar","historia",{id:idHistoria});
-						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/temp/testAJAX.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.borrado);
+						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/miScrum/index.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.borrado);
                     }
                 },
                 actualizarHistoria: function(historia){
                     if (DBBacklogQuery.callback){
 						var solicitud = DBBacklogQuery.HTTP.prepararDatosParaEnviar("actualizar","historia",historia);
-						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/temp/testAJAX.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.actualizacion);
+						DBBacklogQuery.HTTP.solicitudHTTP("http://localhost/miScrum/index.php",JSON.stringify(solicitud),DBBacklogQuery.notificaciones.actualizacion);
                     }
                 }  
             },
