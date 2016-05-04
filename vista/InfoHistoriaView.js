@@ -63,11 +63,11 @@
                 },
                 mostrarIconoCargando: function(){
                     var icono = document.getElementById("icono_cargando");
-                    icono.setAttribute("src","recursos/loading.gif");
+                    icono.setAttribute("src","vista/recursos/loading.gif");
                 },
                 ocultarIconoCargando: function(){
                     var icono = document.getElementById("icono_cargando");
-                    icono.setAttribute("src","recursos/1x1.png");}
+                    icono.setAttribute("src","vista/recursos/1x1.png");}
             },
             comportamiento: {
                 FUNCIONALIDAD_INSERTAR: 0,

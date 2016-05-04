@@ -44,7 +44,7 @@
                             /*InfoHistoriaView.interface.ocultar();
                             alert("La historia no se ha modificado");
                             console.log(document.getElementById("icono_cargando_comp_info_historia").style.visibility);*/
-			    BacklogViewModel.callbacks.notificarHistoriaActualizada(JSON.stringify({error: "No hay cambios en la historia"}));
+							BacklogViewModel.callbacks.notificarHistoriaActualizada(JSON.stringify({error: "No hay cambios en la historia"}));
                         } else {
                             DBBacklogQuery.setViewModelCallback(BacklogViewModel.callbacks.notificarHistoriaActualizada);
                             DBBacklogQuery.solicitudes.actualizarHistoria(historia);

@@ -45,7 +45,7 @@
                 if ((this.id == historia.id) && 
                     (this.nombre == historia.nombre) &&
                     (this.descripcion == historia.descripcion) &&
-                    (this.valor == this.valor)){
+                    (this.valor == historia.valor)){
                     return true;
                 } else {
                     return false;
